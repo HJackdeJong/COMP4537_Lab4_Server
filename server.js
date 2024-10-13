@@ -1,6 +1,6 @@
 const http = require("http");
 const url = require("url");
-import MESSAGES from "./lang/messages/en/user.js";
+const MESSAGES = require("./lang/messages/en/user.js");
 const Dictionary = require("./modules/dictionary");
 
 const PORT = 3004;
@@ -12,10 +12,12 @@ const server = http.createServer((req, res) => {
   const pathname = parsedUrl.pathname;
   const query = parsedUrl.query;
 
-  res.setHeader("Content-Type", "application.JSON");
-  res.setHeader("Access-control-Allow-Origin", "*");
+  totalRequests++;
 
-  if ((pathname = "/add/definitions" && req.method == "GET")) {
+  res.setHeader("Content-Type", "application/json");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+
+  if (pathname === "/add/definitions" && req.method === "GET") {
     const word = query.word;
 
     if (!word) {
@@ -31,7 +33,7 @@ const server = http.createServer((req, res) => {
       res.end(
         JSON.stringify({
           requestNumber: totalRequests,
-          wordCound: dictionary.getWordCount(),
+          wordCount: dictionary.getWordCount(),
           word: word,
           definition: definition,
         })
@@ -41,15 +43,14 @@ const server = http.createServer((req, res) => {
       res.end(
         JSON.stringify({
           requestNumber: totalRequests,
-          wordCound: dictionary.getWordCount(),
+          wordCount: dictionary.getWordCount(),
           word: word,
           message: MESSAGES.wordNotFound.replace("%WORD%", word),
         })
       );
     }
 
-    // adding a word to the dictionary
-  } else if ((pathname = "/api/definitions" && req.method == "POST")) {
+  } else if (pathname === "/api/definitions" && req.method === "POST") {
     let body = "";
 
     req.on("data", (chunk) => {
@@ -81,7 +82,7 @@ const server = http.createServer((req, res) => {
             JSON.stringify({
               requestNumber: totalRequests,
               message: MESSAGES.newEntry,
-              totalEntries: dictionary.getTotalEntries(),
+              totalEntries: dictionary.getWordCount(),
             })
           );
         } else {
@@ -90,7 +91,7 @@ const server = http.createServer((req, res) => {
             JSON.stringify({
               requestNumber: totalRequests,
               message: MESSAGES.alreadyExists.replace("%WORD%", word),
-              totalEntries: dictionary.getTotalEntries(),
+              totalEntries: dictionary.getWordCount(),
             })
           );
         }
