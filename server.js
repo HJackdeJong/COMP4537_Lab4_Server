@@ -14,17 +14,33 @@ const server = http.createServer((req, res) => {
 
   totalRequests++;
 
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
-  if (req.method === "OPTIONS") {
-    res.writeHead(204);
-    res.end();
-    return;
-  }
-
-  res.setHeader("Content-Type", "application/json");
+    // Allow both Vercel and localhost for testing
+    const allowedOrigins = [
+      "https://comp-4537-lab4-client-82bumy5ja-harrisons-projects-a2d39595.vercel.app",
+      "http://localhost:3000"
+    ];
+    
+    const origin = req.headers.origin;
+  
+    if (allowedOrigins.includes(origin)) {
+      res.setHeader("Access-Control-Allow-Origin", origin);
+    }
+  
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  
+    // Handle preflight (OPTIONS) request for CORS
+    if (req.method === "OPTIONS") {
+      res.writeHead(204, {
+        "Access-Control-Allow-Origin": origin,
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type"
+      });
+      res.end();
+      return;
+    }
+  
+    res.setHeader("Content-Type", "application/json");
 
   if (pathname === "/add/definitions" && req.method === "GET") {
     const word = query.word;
