@@ -14,10 +14,8 @@ const server = http.createServer((req, res) => {
 
   totalRequests++;
 
-    // Allow both Vercel and localhost for testing
     const allowedOrigins = [
-      "https://comp-4537-lab4-client-82bumy5ja-harrisons-projects-a2d39595.vercel.app",
-      "http://localhost:3000"
+      "https://comp-4537-lab4-client-chi.vercel.app/",
     ];
     
     const origin = req.headers.origin;
@@ -29,7 +27,6 @@ const server = http.createServer((req, res) => {
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   
-    // Handle preflight (OPTIONS) request for CORS
     if (req.method === "OPTIONS") {
       res.writeHead(204, {
         "Access-Control-Allow-Origin": origin,
