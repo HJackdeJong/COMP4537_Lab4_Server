@@ -14,8 +14,17 @@ const server = http.createServer((req, res) => {
 
   totalRequests++;
 
-  res.setHeader("Content-Type", "application/json");
   res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
+
+  res.setHeader("Content-Type", "application/json");
 
   if (pathname === "/add/definitions" && req.method === "GET") {
     const word = query.word;
