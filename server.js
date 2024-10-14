@@ -15,7 +15,7 @@ const server = http.createServer((req, res) => {
   totalRequests++;
 
     const allowedOrigins = [
-      "https://comp-4537-lab4-client-chi.vercel.app/",
+      "https://comp-4537-lab4-client-chi.vercel.app",
     ];
     
     const origin = req.headers.origin;
